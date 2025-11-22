@@ -5,7 +5,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 struct Walk {
   // UWAGA: Zmieniłem remainingTime z powrotem na 900 (15 minut), jeśli chcesz 15 minut.
   // Zostawiłem 9, jak w Twoim kodzie, jeśli używasz tego do szybkiego testowania.
-  @State remainingTime: number = 9;
+  @State remainingTime: number = 900;
 
   // Wewnętrzna zmienna do przechowywania ID timera
   private timer: number | null = null;

@@ -1,64 +1,97 @@
 import { BusinessError } from '@kit.BasicServicesKit';
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit'
 import HeartRateSensor from '../sensors/hrSensor';
-
+import { KalmanFilter } from '../common/KalmanFilter';
+import { updateAndPredictAhead } from '../common/update-and-predict';
+import { CreateU } from '../common/control-update';
+import router from '@ohos.router';
+// Import the singleton database manager
 @Entry
 @Component
 struct ActivityMonitorPage {
-  // Dane symulacyjne/dynamiczne
-  @State heartRate: number = 0;  // Tętno w uderzeniach na minutę
-  @State currentPace: string = '05:30'; // Tempo w formacie minuty:sekundy/km
+  // Simulation/Dynamic Data
+  @State heartRate: number = 5
+  @State currentPace: number = 300; // Pace in min:sec/km
+  private paceInterval: number = 0;
+  @State u: number[] = [0, 0, 0] // bpm, pace, time
+  @State kAhead: number = 3
+  @State measurement: number = 10
+  @State stateNow: number = 0
+  @State predictedState: number = 0
+  @State Delay: number = 5000
+  @State TimePassed: number = 0
+
+  @StorageLink('Zone') zone: number = 0;
+
+  private filter: KalmanFilter = new KalmanFilter(
+    5,
+    1,
+    0.95,
+    0.1,
+    1,
+    1,
+    CreateU(this.u)
+  )
 
   private atManager: abilityAccessCtrl.AtManager | null = null
   private context: common.UIAbilityContext | undefined = undefined
 
-  // Stałe dla stylów
+  // Style constants
   private buttonWidth: string = '60%';
   private buttonHeight: number = 40;
   private dividerColor: Color = Color.White;
 
-  private hrListener = (hr: number)=>{
+  private hrListener = (hr: number) => {
     this.heartRate = hr
   }
 
-  async requestPermissionsAndStart(): Promise<void> {
-    const perms: Permissions[] = [
-      'ohos.permission.READ_HEALTH_DATA',
-      'ohos.permission.APPROXIMATELY_LOCATION',
-      'ohos.permission.LOCATION',
 
-    ];
-    try {
-      if (this.atManager && this.context) {
-        const result = await this.atManager.requestPermissionsFromUser(this.context, perms)
-        console.log('Permission request result: ' + JSON.stringify(result))
-      }
-    } catch (err) {
-      console.error('Request permission failed: ' + JSON.stringify(err))
-    }
+  checkPace() {
+    this.measurement = this.heartRate + 1
+
+    // --- DATABASE OPERATION ---
+    // Save the measurement to the RDB Store
+    // We do not await here to prevent blocking the UI/Logic loop
+
+    // --------------------------
+
+    this.u = [this.measurement, this.currentPace, this.TimePassed * this.Delay]
+    const result = updateAndPredictAhead(
+      this.filter,
+      this.measurement,
+      CreateU(this.u),
+      this.kAhead
+    )
+
+    this.TimePassed += 1
   }
-  aboutToAppear(): void {
-    try{
-      this.context = this.getUIContext().getHostContext() as common.UIAbilityContext
-    }catch{
-      this.context = undefined
-    }
-    this.atManager = abilityAccessCtrl.createAtManager()
-    this.requestPermissionsAndStart()
+
+  formatPace(sec: number): string {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
+    async aboutToAppear(): Promise<void> {
 
     HeartRateSensor.subscribe(this.hrListener)
+
+    this.paceInterval = setInterval(() => {
+      this.checkPace();
+    }, this.Delay);
   }
 
   aboutToDisappear(): void {
+    clearInterval(this.paceInterval);
     HeartRateSensor.unsubscribe(this.hrListener)
   }
 
   build() {
-    // Główna kolumna, używa SpaceBetween, aby wypchnąć przycisk na dół
+    // Main Column
     Column() {
-      // Sekcja Metryk (BPM i Pace)
+      // Metrics Section (BPM and Pace)
       Column() {
-        // 1. Sekcja Tętna (BPM)
+        // 1. Heart Rate Section (BPM)
         Column() {
           Text('BPM')
             .fontSize(12)
@@ -66,7 +99,6 @@ struct ActivityMonitorPage {
             .fontColor(Color.Gray)
 
           Text(this.heartRate.toString())
-          // ZMNIEJSZONA CZCIONKA
             .fontSize(28)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.White)
@@ -74,32 +106,32 @@ struct ActivityMonitorPage {
         .width('100%')
         .margin({ top: 20, bottom: 10 })
 
-        // 2. Separator (Pozioma kreska)
+        // 2. Divider
         Divider()
           .strokeWidth(2)
           .color(this.dividerColor)
           .width('50%')
           .margin({ bottom: 10 })
 
-        // 3. Sekcja Tempa (Pace)
+        // 3. Pace Section
         Column() {
-          Text('Pace (min/km)')
+          Text(`Pace:`)
             .fontSize(12)
             .fontWeight(FontWeight.Normal)
             .fontColor(Color.Gray)
 
-          Text(this.currentPace)
-          // ZMNIEJSZONA CZCIONKA
+          Text(this.formatPace(this.currentPace))
             .fontSize(28)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.White)
         }
-        .width('100%')
-        .margin({ bottom: 20 }) // Dodatkowy margines, aby oddzielić od przycisku
-      }
-      //.layoutWeight(1) // Ten kontener zajmuje całą dostępną przestrzeń
 
-      // 4. Przycisk 'End' na dole
+        .padding(20)
+        .width('100%')
+        .margin({ bottom: 20 })
+      }
+
+      // 4. End Button
       Button() {
         Text('End')
           .fontSize(15)
@@ -113,6 +145,7 @@ struct ActivityMonitorPage {
       .margin({ bottom: 10 })
       .onClick(() => {
         console.info(`Succeeded in clicking 'End'.`)
+        // Ensure the path 'pages/SummaryPage' exists in your main_pages.json
         this.getUIContext().getRouter().pushUrl({url: 'pages/SummaryPage'}).then(() => {
           console.info('Succeeded in jumping to the Summary page.')
         }).catch((err: BusinessError) => {

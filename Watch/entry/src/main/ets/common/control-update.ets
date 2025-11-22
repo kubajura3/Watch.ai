@@ -16,3 +16,15 @@ export function nextU(uPrev: number[]): number[] {
 
   return uNext;
 }
+
+export function CreateU(uPrev: number[]): number[] {
+  const uCreate: number[] = new Array(uPrev.length);
+
+  for (let i = 0; i < uPrev.length; i++) {
+    // EXAMPLE MODEL (customize):
+
+    uCreate[i] = 0.9 * uPrev[i] + 0.2;
+  }
+
+  return uCreate;
+}

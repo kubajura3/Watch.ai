@@ -3,6 +3,7 @@ import { UIContext, CircleShape } from '@kit.ArkUI';
 import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute } from '@kit.ArkUI';
 import Constant from '../common/constant';
 import HeartZone from '../models/model';
+import router from '@ohos.router';
 
 @Builder
 function buildCrownGestureTitle() {
@@ -57,8 +58,10 @@ struct HeartZoneList {
               .backgroundColor(0x17A98D)
           }.align(Alignment.Center)
           .onClick(() => {
+            AppStorage.setOrCreate('Zone', index);
             this.getUIContext().getRouter().pushUrl({
-              url: this.pageOf(index + 1)
+              url: 'pages/StartTrainingPage',
+              // Pass the necessary data in the 'params' object
             })
           })
         }, (item: number, index: number) => (item + index).toString())

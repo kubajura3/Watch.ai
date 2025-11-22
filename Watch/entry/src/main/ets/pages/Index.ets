@@ -32,7 +32,7 @@ struct Index {
       .height(40)
       .onClick(() => {
         console.info(`Succeeded in clicking the 'Go' button.`)
-        this.getUIContext().getRouter().pushUrl({url: 'pages/StartTrainingPage'}).then(() => {
+        this.getUIContext().getRouter().pushUrl({url: 'pages/ChooseZone'}).then(() => {
           console.info('Succeeded in jumping to the zone page.')
         }).catch((err: BusinessError) => {
           console.error(`Failed to jump to the zone page.Code is ${err.code}, message is ${err.message}`)
