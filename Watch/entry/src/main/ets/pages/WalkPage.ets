@@ -2,7 +2,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 
 @Entry
 @Component
-struct WarmupPage2 {
+struct Walk {
   // UWAGA: Zmieniłem remainingTime z powrotem na 900 (15 minut), jeśli chcesz 15 minut.
   // Zostawiłem 9, jak w Twoim kodzie, jeśli używasz tego do szybkiego testowania.
   @State remainingTime: number = 9;
@@ -56,7 +56,7 @@ struct WarmupPage2 {
     // 1. Główna kolumna: rozkłada elementy na górze, w środku i na dole.
     Column() {
       // Nagłówek
-      Text('Warm-up')
+      Text('Walk')
         .fontSize(24)
         .fontWeight(FontWeight.Bold)
         // Zmniejszony margines od góry, aby był wyżej, ale wciąż widoczny
@@ -78,7 +78,7 @@ struct WarmupPage2 {
 
       // Przycisk Next - na samym dole (widoczny tylko po zakończeniu)
       if (this.isFinished) {
-        Button('Next')
+        Button('End configuration')
           .width('60%') // Lekko szerszy, ale wciąż kompaktowy
           .height(40) // Lekko wyższy
           .fontSize(18)
@@ -87,11 +87,11 @@ struct WarmupPage2 {
           .backgroundColor(Color.Green) // Zmieniony kolor, by lepiej się wyróżniał po zakończeniu
           .margin({ bottom: 20 }) // Stały margines od dołu, aby nie był obcięty
           .onClick(() => {
-            console.info(`Succeeded in clicking the 'Next' button in WarmUpPage.`)
-            this.getUIContext().getRouter().pushUrl({url: 'pages/MaxStableTempoPage'}).then(() => {
-              console.info('Succeeded in jumping to the MaxStableTempo page.')
+            console.info(`Succeeded in clicking the 'End configuration' button in WalkPage.`)
+            this.getUIContext().getRouter().pushUrl({url: 'pages/EndConfigurationPage'}).then(() => {
+              console.info('Succeeded in jumping to the EndConfiguration page.')
             }).catch((err: BusinessError) => {
-              console.error(`Failed to jump to the MaxStableTempo page. Code is ${err.code}, message is ${err.message}`)
+              console.error(`Failed to jump to the EndConfiguration page. Code is ${err.code}, message is ${err.message}`)
             })
           })
       } else {

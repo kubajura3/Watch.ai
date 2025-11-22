@@ -3,6 +3,9 @@
     "pages/Index",
     "pages/ChooseZone",
     "pages/ConfigInfoPage",
-    "pages/WarmUpPage2"
+    "pages/WarmUpPage2",
+    "pages/MaxStableTempoPage",
+    "pages/WalkPage",
+    "pages/EndConfigurationPage"
   ]
 }
