@@ -95,11 +95,23 @@ struct WarmupPage2 {
             })
           })
       } else {
-        // Pusty element, który utrzymuje stałą przestrzeń dla przycisku,
-        // zapobiegając przesunięciu się licznika po jego pojawieniu
-        Row()
+        // PRZYCISK 'END' (W TRAKCIE LICZENIA)
+        Button('End')
+          .width('60%')
           .height(40)
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .borderRadius(20)
+          .backgroundColor(Color.Red) // Czerwony
           .margin({ bottom: 20 })
+          .onClick(() => {
+            console.info(`Succeeded in clicking the 'End' button in WarmUpPage.`)
+            this.getUIContext().getRouter().pushUrl({url: 'pages/Index'}).then(() => {
+              console.info('Succeeded in jumping to the Index page.')
+            }).catch((err: BusinessError) => {
+              console.error(`Failed to jump to the Index page. Code is ${err.code}, message is ${err.message}`)
+            })
+          })
       }
     }
     .width('100%')
