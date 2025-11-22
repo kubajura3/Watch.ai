@@ -1,3 +1,5 @@
+import { BusinessError } from '@kit.BasicServicesKit';
+
 @Entry
 @Component
 struct WatchInstructionPage {
@@ -52,8 +54,12 @@ struct WatchInstructionPage {
         .borderRadius(15) // Dodanie zaokrąglenia, aby pasowało do mniejszego przycisku
         .margin({ bottom: 10 }) // Mniejszy margines od dolnej krawędzi
         .onClick(() => {
-          console.log('Przycisk Next został kliknięty!');
-          // Tutaj umieść logikę nawigacji lub inną akcję
+          console.info(`Succeeded in clicking the 'Start' button in ConfigInfo.`)
+          this.getUIContext().getRouter().pushUrl({url: 'pages/WarmUpPage2'}).then(() => {
+            console.info('Succeeded in jumping to the WarmUp page.')
+          }).catch((err: BusinessError) => {
+            console.error(`Failed to jump to the WarmUp page. Code is ${err.code}, message is ${err.message}`)
+          })
         })
     }
     .width('100%')
