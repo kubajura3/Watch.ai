@@ -10,7 +10,7 @@ struct Index {
     Column() {
       // Przycisk 'Go'
       Button() {
-        Text('Start')
+        Text('Go')
           .fontSize(20) // Lepszy rozmiar czcionki
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White) // Lepszy kontrast
