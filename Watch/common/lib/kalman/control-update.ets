@@ -9,8 +9,8 @@ export function nextU(uPrev: number[]): number[] {
 
   for (let i = 0; i < uPrev.length; i++) {
     // EXAMPLE MODEL (customize):
-    // small drift + decay
-    uNext[i] = 0.9 * uPrev[i] + 0.1;
+
+    uNext[i] = 0.9 * uPrev[i] + 0.2;
   }
 
   return uNext;
