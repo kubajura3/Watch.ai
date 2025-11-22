@@ -3,17 +3,13 @@ import { BusinessError } from '@kit.BasicServicesKit';
 @Entry
 @Component
 struct Walk {
-  // UWAGA: Zmieniłem remainingTime z powrotem na 900 (15 minut), jeśli chcesz 15 minut.
-  // Zostawiłem 9, jak w Twoim kodzie, jeśli używasz tego do szybkiego testowania.
-  @State remainingTime: number = 900;
 
-  // Wewnętrzna zmienna do przechowywania ID timera
+  @State remainingTime: number = 9;
+
   private timer: number | null = null;
 
-  // Stan kontrolujący widoczność przycisku Next
   @State isFinished: boolean = false;
 
-  // ... (Logika timera: aboutToAppear, aboutToDisappear, startTimer, stopTimer, formatTime pozostają bez zmian)
   aboutToAppear() {
     this.startTimer();
   }
@@ -53,39 +49,35 @@ struct Walk {
   }
 
   build() {
-    // 1. Główna kolumna: rozkłada elementy na górze, w środku i na dole.
+
     Column() {
-      // Nagłówek
       Text('Walk')
         .fontSize(24)
         .fontWeight(FontWeight.Bold)
-        // Zmniejszony margines od góry, aby był wyżej, ale wciąż widoczny
         .margin({ top: 30 })
         .width('100%')
         .textAlign(TextAlign.Center)
         .fontColor(Color.White)
 
-      // Kontener licznika - używa layoutWeight(1), aby zająć całą środkową przestrzeń
       Column() {
         Text(this.formatTime(this.remainingTime))
-          .fontSize(64) // Zwiększony rozmiar czcionki dla lepszej widoczności
-          .fontWeight(FontWeight.Medium) // Delikatnie pogrubiony, aby był czytelniejszy
+          .fontSize(64)
+          .fontWeight(FontWeight.Medium)
           .fontColor(this.isFinished ? Color.Red : Color.White)
       }
       .width('100%')
-      .layoutWeight(1) // Wypycha nagłówek na górę, a przycisk na dół
-      .justifyContent(FlexAlign.Center) // Wyśrodkowanie licznika wewnątrz jego przestrzeni
+      .layoutWeight(1)
+      .justifyContent(FlexAlign.Center)
 
-      // Przycisk Next - na samym dole (widoczny tylko po zakończeniu)
       if (this.isFinished) {
         Button('End')
-          .width('60%') // Lekko szerszy, ale wciąż kompaktowy
-          .height(40) // Lekko wyższy
+          .width('60%')
+          .height(40)
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .borderRadius(20)
-          .backgroundColor(Color.Green) // Zmieniony kolor, by lepiej się wyróżniał po zakończeniu
-          .margin({ bottom: 20 }) // Stały margines od dołu, aby nie był obcięty
+          .backgroundColor(Color.Green)
+          .margin({ bottom: 20 })
           .onClick(() => {
             console.info(`Succeeded in clicking the 'End configuration' button in WalkPage.`)
             this.getUIContext().getRouter().pushUrl({url: 'pages/EndConfigurationPage'}).then(() => {
@@ -95,14 +87,13 @@ struct Walk {
             })
           })
       } else {
-        // PRZYCISK 'END' (W TRAKCIE LICZENIA)
         Button('End')
           .width('60%')
           .height(40)
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .borderRadius(20)
-          .backgroundColor(Color.Red) // Czerwony
+          .backgroundColor(Color.Red)
           .margin({ bottom: 20 })
           .onClick(() => {
             console.info(`Succeeded in clicking the 'End' button in WalkPage.`)
