@@ -3,32 +3,32 @@ import HeartZone from "../models/model"
 export default class Constant {
   static heartZoneList: HeartZone[] = [
     {
-      title: "Heart Zone 1",
-      description: "60-70 bpm based on your performance",
+      title: "Zone 1",
+      description: "95–114 bpm",
       task: "Task",
       image: 'app.media.touch'
     },
     {
-      title: "Heart Zone 2",
-      description: "71-92 bpm based on your performance",
+      title: "Zone 2",
+      description: "114–133 bpm",
       task: "Task",
       image: 'app.media.touch'
     },
     {
-      title: "Heart Zone 3",
-      description: "93-117 bpm based on your performance",
+      title: "Zone 3",
+      description: "133–152 bpm",
       task: "Task",
       image: 'app.media.touch'
     },
     {
-      title: "Heart Zone 4",
-      description: "118-150 bpm based on your performance",
+      title: "Zone 4",
+      description: "152–171 bpm",
       task: "Task",
       image: 'app.media.touch'
     },
     {
-      title: "Heart Zone 5",
-      description: "151-200 bpm based on your performance",
+      title: "Zone 5",
+      description: "171–190 bpm",
       task: "Task",
       image: 'app.media.touch'
     },
