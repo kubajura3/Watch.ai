@@ -8,12 +8,13 @@ import router from '@ohos.router';
 @Builder
 function buildCrownGestureTitle() {
   Column() {
-    Text("Choose your desired Heart Zone for the training")
-      .fontSize('20px')
+    // Text("Choose your desired Heart Zone for the training")
+    Text("Choose the target pace")
+    .fontSize('40px')
       .fontWeight(FontWeight.Bold)
-      .fontColor(Color.Black)
+      .fontColor(Color.White)
       .wordBreak(WordBreak.BREAK_WORD)
-  }.margin({ top: 20 }).width('70%')
+  }.margin({ top: 20 , bottom: 10}).width('70%')
 }
 
 interface ListType {
@@ -44,18 +45,21 @@ struct HeartZoneList {
       .width(this.watchSize)
       .height(this.watchSize)
       .clipShape(new CircleShape({ width: '100%', height: '100%' }))
-      .backgroundColor(Color.White)
+      .backgroundColor(Color.Black)
 
       ArcList({ initialIndex: 0, header: this.tabBar1 }) {
         ForEach(this.gestureList, (item: HeartZone, index: number) => {
           ArcListItem() {
-            Button('' + item.title, { type: ButtonType.Capsule })
+            Button(){Column(){
+              Text(item.title)
+              Text(item.description)}}
+              .type(ButtonType.Capsule)
               .width(this.listSize)
               .height('100px')
-              .fontSize('40px')
               .focusable(true)
               .focusOnTouch(true)
-              .backgroundColor(0x17A98D)
+              // .backgroundColor(0x17A98D + index * 1000)
+            .backgroundColor(0x17A98D + index * 1000)
           }.align(Alignment.Center)
           .onClick(() => {
             AppStorage.setOrCreate('Zone', index);
