@@ -3,7 +3,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 @Entry
 @Component
 struct WatchInstructionPage {
-  // Długi tekst instrukcji do wyświetlenia z numeracją
+
   private instructionPoints: string[] = [
     '1. At first you will be asked to do a 15 minutes warm-up. Easy run, some jumps, stretching etc, to make your heart beat faster.',
     '2. Next your task is to run with your maximum possible and stable tempo or 20 minutes.',
@@ -12,21 +12,19 @@ struct WatchInstructionPage {
   ];
 
   build() {
-    Column() { // Główny kontener, układ wertykalny
-      // Sekcja przewijana, zajmująca większość przestrzeni
+    Column() {
+
       Scroll() {
         Column({ space: 10 }) {
-          // Nagłówek - Zwiększony górny margines
+
           Text('Instruction')
             .fontSize(24)
             .fontWeight(FontWeight.Bold)
             .width('100%')
             .textAlign(TextAlign.Center)
-            // ZWIĘKSZONY GÓRNY MARGINES
-            .margin({ top: 30, bottom: 20 }) // Zmieniono z 10 na 30
+            .margin({ top: 30, bottom: 20 })
 
-          // Lista punktów z numeracją
-          Column({ space: 10 }) { // Odstęp między punktami
+          Column({ space: 10 }) {
             ForEach(this.instructionPoints, (item: string) => {
               Text(item)
                 .fontSize(14)
@@ -39,20 +37,18 @@ struct WatchInstructionPage {
             })
           }
         }
-        .padding({ left: 18, right: 18, bottom: 20 }) // Globalne paddingi
+        .padding({ left: 18, right: 18, bottom: 20 })
         .width('100%')
       }
-      .layoutWeight(1) // Sekcja przewijana zajmuje całą dostępną przestrzeń
+      .layoutWeight(1)
 
-      // Przycisk "Next" - znacznie krótszy i niższy
       Button('Start')
-      // ZMNIEJSZONA SZEROKOŚĆ
-        .width('30%') //
-        // ZMNIEJSZONA WYSOKOŚĆ
-        .height(30) // Zmieniono z 36 na 30
+        .width('30%')
+        .height(30)
         .fontSize(15)
-        .borderRadius(15) // Dodanie zaokrąglenia, aby pasowało do mniejszego przycisku
-        .margin({ bottom: 10 }) // Mniejszy margines od dolnej krawędzi
+        .fontWeight(FontWeight.Bold)
+        .borderRadius(15)
+        .margin({ bottom: 10 })
         .onClick(() => {
           console.info(`Succeeded in clicking the 'Start' button in ConfigInfo.`)
           this.getUIContext().getRouter().pushUrl({url: 'pages/WarmUpPage2'}).then(() => {
