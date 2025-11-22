@@ -6,6 +6,8 @@
     "pages/WarmUpPage2",
     "pages/MaxStableTempoPage",
     "pages/WalkPage",
-    "pages/EndConfigurationPage"
+    "pages/EndConfigurationPage",
+    "pages/StartTrainingPage",
+    "pages/RunPage"
   ]
 }
