@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "permission_reason_read_health_data",
+      "value": "read heart rate values"
     }
   ]
 }
