@@ -1,6 +1,9 @@
 import { BusinessError } from '@kit.BasicServicesKit';
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit'
-import HeartRateSensor from '../sensors/hrSensor';
+// import HeartRateSensor from '../sensors/hrSensor';
+import HeartRateSensor from '../demo/BpmDemo';
+import PaceMonitor from '../demo/PaceDemo';
+
 import { KalmanFilter } from '../common/KalmanFilter';
 import { updateAndPredictAhead } from '../common/update-and-predict';
 import { CreateU } from '../common/control-update';
@@ -10,8 +13,12 @@ import router from '@ohos.router';
 @Component
 struct ActivityMonitorPage {
   // Simulation/Dynamic Data
-  @State heartRate: number = 5
-  @State currentPace: number = 300; // Pace in min:sec/km
+  @State heartRate: number = 0;  // bpm
+  @State paceMonitor: string = '--:--'; // pace in min:sec / km format
+  @State currentPace:  number = 0; // s/km
+
+
+  // model params
   private paceInterval: number = 0;
   @State u: number[] = [0, 0, 0] // bpm, pace, time
   @State kAhead: number = 3
@@ -45,6 +52,27 @@ struct ActivityMonitorPage {
     this.heartRate = hr
   }
 
+  private pmListener = (cp: number, pm: string)=>{
+    this.paceMonitor = pm
+    this.currentPace = cp
+  }
+
+  async requestPermissionsAndStart(): Promise<void> {
+    const perms: Permissions[] = [
+      'ohos.permission.READ_HEALTH_DATA',
+      'ohos.permission.APPROXIMATELY_LOCATION',
+      'ohos.permission.LOCATION',
+
+    ];
+    try {
+      if (this.atManager && this.context) {
+        const result = await this.atManager.requestPermissionsFromUser(this.context, perms)
+        console.log('Permission request result: ' + JSON.stringify(result))
+      }
+    } catch (err) {
+      console.error('Request permission failed: ' + JSON.stringify(err))
+    }
+  }
 
   checkPace() {
     this.measurement = this.heartRate + 1
@@ -66,15 +94,17 @@ struct ActivityMonitorPage {
     this.TimePassed += 1
   }
 
-  formatPace(sec: number): string {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  }
-
-    async aboutToAppear(): Promise<void> {
+  aboutToAppear(): void {
+    try{
+      this.context = this.getUIContext().getHostContext() as common.UIAbilityContext
+    }catch{
+      this.context = undefined
+    }
+    this.atManager = abilityAccessCtrl.createAtManager()
+    this.requestPermissionsAndStart()
 
     HeartRateSensor.subscribe(this.hrListener)
+    PaceMonitor.subscribe(this.pmListener)
 
     this.paceInterval = setInterval(() => {
       this.checkPace();
@@ -84,6 +114,7 @@ struct ActivityMonitorPage {
   aboutToDisappear(): void {
     clearInterval(this.paceInterval);
     HeartRateSensor.unsubscribe(this.hrListener)
+    PaceMonitor.unsubscribe(this.pmListener)
   }
 
   build() {
@@ -120,7 +151,7 @@ struct ActivityMonitorPage {
             .fontWeight(FontWeight.Normal)
             .fontColor(Color.Gray)
 
-          Text(this.formatPace(this.currentPace))
+          Text(this.paceMonitor)
             .fontSize(28)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.White)

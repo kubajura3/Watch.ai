@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\awjus\\.ohos\\config\\default_Watch_ONwWIYnI6monCvsQXuObw4hflo5dvCPsHUqVlyAnW4M=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BF92D637704A39A4F2AEB8C04F44A0BA15D5A77795739F5D721BB0F09E793BFECFC5DDC31F17B1B",
+          "profile": "C:\\Users\\awjus\\.ohos\\config\\default_Watch_ONwWIYnI6monCvsQXuObw4hflo5dvCPsHUqVlyAnW4M=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\awjus\\.ohos\\config\\default_Watch_ONwWIYnI6monCvsQXuObw4hflo5dvCPsHUqVlyAnW4M=.p12",
+          "storePassword": "0000001B527E79434A95B7B03F3F52B2B98B8986B5164A77A809FAD15A2BD6B4824FFB4ED84478AFA028A9"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
