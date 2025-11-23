@@ -176,7 +176,7 @@ struct ActivityMonitorPage {
       .onClick(() => {
         console.info(`Succeeded in clicking 'End'.`)
         // Ensure the path 'pages/SummaryPage' exists in your main_pages.json
-        this.getUIContext().getRouter().pushUrl({url: 'pages/SummaryPage'}).then(() => {
+        this.getUIContext().getRouter().pushUrl({url: 'pages/EndTrainingPage'}).then(() => {
           console.info('Succeeded in jumping to the Summary page.')
         }).catch((err: BusinessError) => {
           console.error(`Failed to jump to SummaryPage. Code is ${err.code}, message is ${err.message}`)
