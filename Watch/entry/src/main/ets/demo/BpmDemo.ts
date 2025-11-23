@@ -18,6 +18,20 @@ export default class HeartRateSensor {
   private static heartRate = 0;
   private static listeners = new Set<HRListener>();
 
+  static getHeartRateMean(): number {
+    if (this.SIMULATED_HEART_RATES.length === 0) {
+      console.warn('[HR]', 'Heart rate array is empty, returning 0');
+      return 0;
+    }
+
+    const sum = this.SIMULATED_HEART_RATES.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+
+    const mean = sum / this.SIMULATED_HEART_RATES.length;
+    return mean;
+  }
+
   // Component subscribes to heart rate changes
   static subscribe(cb: HRListener) {
     this.listeners.add(cb);
