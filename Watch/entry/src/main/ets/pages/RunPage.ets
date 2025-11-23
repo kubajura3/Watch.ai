@@ -29,6 +29,7 @@ struct ActivityMonitorPage {
   @State TimePassed: number = 0
   @State Vibrated: boolean = false
   @State bpm_limit: number = 0
+  @State Time_since_last_vibr: number = 0
 
   @StorageLink('Zone') zone: number = 0;
   @StorageLink('Zone_desc') bpm_range: string = "bpm";
@@ -80,13 +81,14 @@ struct ActivityMonitorPage {
 
   checkPace() {
     this.measurement = this.heartRate
-
-    // --- DATABASE OPERATION ---
+      // --- DATABASE OPERATION ---
     // Save the measurement to the RDB Store
     // We do not await here to prevent blocking the UI/Logic loop
 
     // --------------------------
-
+    if(this.Time_since_last_vibr > 22){
+      this.Vibrated = false
+    }
     this.u = [(this.TimePassed * this.Delay / 8000)%6, this.measurement]
     const result = updateAndPredictAhead(
       this.filter,
@@ -103,6 +105,9 @@ struct ActivityMonitorPage {
       this.Vibrated = true
     }
     this.TimePassed += 1
+    if(this.Vibrated == true){
+      this.Time_since_last_vibr += 1
+    }
   }
 
   aboutToAppear(): void {
