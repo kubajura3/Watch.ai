@@ -9,6 +9,7 @@
     "pages/EndConfigurationPage",
     "pages/StartTrainingPage",
     "pages/RunPage",
-    "pages/EndTrainingPage"
+    "pages/EndTrainingPage",
+    "pages/JokePage"
   ]
 }
