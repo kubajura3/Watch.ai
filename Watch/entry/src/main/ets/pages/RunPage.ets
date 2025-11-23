@@ -7,8 +7,7 @@ import PaceMonitor from '../demo/PaceDemo';
 import { KalmanFilter } from '../common/KalmanFilter';
 import { updateAndPredictAhead } from '../common/update-and-predict';
 import { CreateU } from '../common/control-update';
-import router from '@ohos.router';
-// Import the singleton database manager
+import { vibrator } from '@kit.SensorServiceKit';
 
 @Entry
 @Component
@@ -22,23 +21,26 @@ struct ActivityMonitorPage {
   // model params
   private paceInterval: number = 0;
   @State u: number[] = [0, 0, 0] // bpm, pace, time
-  @State kAhead: number = 3
+  @State kAhead: number = 10
   @State measurement: number = 10
   @State stateNow: number = 0
   @State predictedState: number = 0
-  @State Delay: number = 5000
+  @State Delay: number = 600
   @State TimePassed: number = 0
+  @State Vibrated: boolean = false
+  @State bpm_limit: number = 0
 
   @StorageLink('Zone') zone: number = 0;
+  @StorageLink('Zone_desc') bpm_range: string = "bpm";
 
   private filter: KalmanFilter = new KalmanFilter(
-    5,
+    100,
     1,
-    0.95,
-    0.1,
+    0.85,
+    7.890117936233612,
     1,
     1,
-    CreateU(this.u)
+    [ 0.09047265, 0.00097018,  0.19004]
   )
 
   private atManager: abilityAccessCtrl.AtManager | null = null
@@ -51,6 +53,7 @@ struct ActivityMonitorPage {
 
   private hrListener = (hr: number) => {
     this.heartRate = hr
+    this.heartRate -= (168 - this.bpm_limit)
   }
 
   private pmListener = (cp: number, pm: string)=>{
@@ -76,7 +79,7 @@ struct ActivityMonitorPage {
   }
 
   checkPace() {
-    this.measurement = this.heartRate + 1
+    this.measurement = this.heartRate
 
     // --- DATABASE OPERATION ---
     // Save the measurement to the RDB Store
@@ -84,14 +87,21 @@ struct ActivityMonitorPage {
 
     // --------------------------
 
-    this.u = [this.measurement, this.currentPace, this.TimePassed * this.Delay]
+    this.u = [(this.TimePassed * this.Delay / 8000)%6, this.measurement]
     const result = updateAndPredictAhead(
       this.filter,
       this.measurement,
       CreateU(this.u),
       this.kAhead
     )
-
+    if(result.predictedState < this.bpm_limit - 4){
+      this.Vibrated = false
+    }
+    if(result.predictedState > 170 && this.Vibrated == false){
+      vibrator.vibrate(2000)
+      console.log(this.TimePassed + "     exceeded     " + result.predictedState)
+      this.Vibrated = true
+    }
     this.TimePassed += 1
   }
 
@@ -101,8 +111,12 @@ struct ActivityMonitorPage {
     }catch{
       this.context = undefined
     }
+
     this.atManager = abilityAccessCtrl.createAtManager()
     this.requestPermissionsAndStart()
+
+    this.bpm_limit = parseInt(this.bpm_range.slice(-7, -4))
+    console.log(this.bpm_limit.toString())
 
     HeartRateSensor.subscribe(this.hrListener)
     PaceMonitor.subscribe(this.pmListener)
@@ -130,7 +144,7 @@ struct ActivityMonitorPage {
           .fontWeight(FontWeight.Normal)
           .fontColor(Color.Gray)
 
-        Text(this.heartRate.toString())
+        Text(this.heartRate.toFixed(2))
           .fontSize(28)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White)

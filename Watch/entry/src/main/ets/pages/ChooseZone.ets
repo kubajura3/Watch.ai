@@ -63,6 +63,7 @@ struct HeartZoneList {
           }.align(Alignment.Center)
           .onClick(() => {
             AppStorage.setOrCreate('Zone', index);
+            AppStorage.setOrCreate('Zone_desc', item.description);
             this.getUIContext().getRouter().pushUrl({
               url: 'pages/StartTrainingPage',
               // Pass the necessary data in the 'params' object

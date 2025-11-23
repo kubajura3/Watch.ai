@@ -5,7 +5,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 @Entry
 @Component
 struct EndTrainingPage {
-
+  @StorageLink('Zone') zone: number = 0;
   build() {
     // Main Column
     Column() {
@@ -18,7 +18,7 @@ struct EndTrainingPage {
           .fontWeight(FontWeight.Normal)
           .fontColor(Color.Gray)
 
-        Text(HeartRateSensor.getHeartRateMean().toString())
+        Text(HeartRateSensor.getHeartRateMean().toFixed(2))
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White)
@@ -33,7 +33,7 @@ struct EndTrainingPage {
           .fontWeight(FontWeight.Normal)
           .fontColor(Color.Gray)
 
-        Text('Zone 2')
+        Text('Zone ' + (this.zone+1).toString())
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White)
