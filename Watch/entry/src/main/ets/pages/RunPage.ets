@@ -89,20 +89,24 @@ struct ActivityMonitorPage {
     if(this.Time_since_last_vibr > 22){
       this.Vibrated = false
     }
+
     this.u = [(this.TimePassed * this.Delay / 8000)%6, this.measurement]
     const result = updateAndPredictAhead(
       this.filter,
       this.measurement,
       CreateU(this.u),
       this.kAhead
+
     )
+    console.log(this.TimePassed + "     exceeded     " + result.predictedState)
     if(result.predictedState < this.bpm_limit - 4){
       this.Vibrated = false
     }
-    if(result.predictedState > 170 && this.Vibrated == false){
+    if(result.predictedState > this.bpm_limit && this.Vibrated == false){
       vibrator.vibrate(2000)
       console.log(this.TimePassed + "     exceeded     " + result.predictedState)
       this.Vibrated = true
+      this.Time_since_last_vibr = 0
     }
     this.TimePassed += 1
     if(this.Vibrated == true){
@@ -195,6 +199,7 @@ struct ActivityMonitorPage {
       .margin({ bottom: 10 })
       .onClick(() => {
         console.info(`Succeeded in clicking 'End'.`)
+        this.aboutToDisappear()
         // Ensure the path 'pages/SummaryPage' exists in your main_pages.json
         this.getUIContext().getRouter().pushUrl({url: 'pages/EndTrainingPage'}).then(() => {
           console.info('Succeeded in jumping to the Summary page.')
