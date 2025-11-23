@@ -81,6 +81,6 @@ export default class PaceMonitor {
   // Optional: Get one-time data
   static once(cb: PMListener) {
     cb(this.paceMonitor, this.format(this.paceMonitor));
-    console.info('[HR]', `One-time simulated heart rate -> ${this.paceMonitor}`);
+    console.info('[PM]', `One-time simulated pace -> ${this.paceMonitor}`);
   }
 }

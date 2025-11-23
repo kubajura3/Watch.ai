@@ -1,6 +1,7 @@
 import { BusinessError } from '@kit.BasicServicesKit';
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit'
 // import HeartRateSensor from '../sensors/hrSensor';
+// import PaceMonitor from '../sensors/paceSensor';
 import HeartRateSensor from '../demo/BpmDemo';
 import PaceMonitor from '../demo/PaceDemo';
 import { KalmanFilter } from '../common/KalmanFilter';
