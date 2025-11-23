@@ -171,7 +171,7 @@ struct ActivityMonitorPage {
       .type(ButtonType.Capsule)
       .width(this.buttonWidth)
       .height(this.buttonHeight)
-      .backgroundColor(Color.Red)
+      .backgroundColor('#ED5555')
       .margin({ bottom: 10 })
       .onClick(() => {
         console.info(`Succeeded in clicking 'End'.`)

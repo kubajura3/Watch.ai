@@ -67,7 +67,7 @@ struct EndTrainingPage {
       .type(ButtonType.Capsule)
       .width('60%')
       .height(40)
-      .backgroundColor(Color.Green)
+      .backgroundColor('#17C97D')
       .margin({ bottom: 10 })
       .onClick(() => {
         console.info(`Succeeded in clicking 'End'.`)

@@ -23,7 +23,7 @@ struct Index {
       }
       .type(ButtonType.Capsule)
       .margin({ top: 10, bottom: 10 })
-      .backgroundColor('#0D9FFB')
+      .backgroundColor('#17C97D')
       .width('60%')
       .height(40)
       .onClick(() => {
@@ -43,7 +43,7 @@ struct Index {
       }
       .type(ButtonType.Capsule)
       //.margin({ top: 10 })
-      .backgroundColor('#0D9FFB')
+      .backgroundColor('#67827A')
       .width('60%')
       .height(40)
       .onClick(() => {

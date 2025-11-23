@@ -62,7 +62,7 @@ struct WarmupPage2 {
         Text(this.formatTime(this.remainingTime))
           .fontSize(64)
           .fontWeight(FontWeight.Medium)
-          .fontColor(this.isFinished ? Color.Red : Color.White)
+          .fontColor(this.isFinished ? '#ED5555' : Color.White)
       }
       .width('100%')
       .layoutWeight(1)
@@ -75,7 +75,7 @@ struct WarmupPage2 {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .borderRadius(20)
-          .backgroundColor(Color.Green)
+          .backgroundColor('#17C97D')
           .margin({ bottom: 20 })
           .onClick(() => {
             console.info(`Succeeded in clicking the 'Next' button in WarmUpPage.`)
@@ -92,7 +92,7 @@ struct WarmupPage2 {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .borderRadius(20)
-          .backgroundColor(Color.Red)
+          .backgroundColor('#ED5555')
           .margin({ bottom: 20 })
           .onClick(() => {
             console.info(`Succeeded in clicking the 'End' button in WarmUpPage.`)
