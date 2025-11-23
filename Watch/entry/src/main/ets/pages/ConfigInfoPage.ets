@@ -48,6 +48,7 @@ struct WatchInstructionPage {
         .fontSize(15)
         .fontWeight(FontWeight.Bold)
         .borderRadius(15)
+        .backgroundColor('#17C97D')
         .margin({ bottom: 10 })
         .onClick(() => {
           console.info(`Succeeded in clicking the 'Start' button in ConfigInfo.`)
