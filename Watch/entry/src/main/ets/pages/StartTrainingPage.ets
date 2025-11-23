@@ -1,4 +1,5 @@
 import { BusinessError } from '@kit.BasicServicesKit';
+import { CircleShape } from '@kit.ArkUI'; // Updated import to include Path
 
 @Entry
 @Component
@@ -9,18 +10,33 @@ struct Index {
     // Używamy Column jako głównego kontenera, aby układać elementy pionowo
     Column() {
       // Przycisk 'Go'
-      Button() {
-        Text('Go')
-          .fontSize(20) // Lepszy rozmiar czcionki
+      // Button() {
+        Text('Start')
+          .fontSize(30) // Lepszy rozmiar czcionki
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White) // Lepszy kontrast
-      }
-      .type(ButtonType.Capsule)
-      .margin({ top: 10, bottom: 10 }) // Odpowiednie odstępy
+      // }
+      // .type(ButtonType.Capsule)
+      // .margin({ top: 10, bottom: 10 }) // Odpowiednie odstępy
       .backgroundColor(Color.Green)
       // Wymiary z oryginalnego kodu
-      .width('60%')
-      .height(40)
+      .width('150%')
+      .height('50%')
+          .radialGradient({
+            // Define colors and their stopping points (offsets)
+            colors: [
+              [Color.Black, 0.0], // Bright Green in the center
+              [0x17F98D, 0.7],                   // Standard Green 70% of the way out
+              [0x36B079, 1.0]      // Dark Green at the edge
+            ],
+            // Since we are applying this to a semi-circle, let's keep the center
+            // slightly offset to the top edge for a better look on the upper half.
+            center: ['50%', '0%'],
+            radius: '100%', // Make the radius match the button's largest dimension
+          })
+      // .type(ButtonType.Normal)
+      // .height(40)
+
       .onClick(() => {
         console.info(`Succeeded in clicking the 'Start' button.`)
         this.getUIContext().getRouter().pushUrl({url: 'pages/RunPage'}).then(() => {
@@ -31,18 +47,33 @@ struct Index {
       })
 
       // Przycisk 'Config'
-      Button() {
+      // Button() {
         Text('Back')
-          .fontSize(20) // Lepszy rozmiar czcionki
+          .fontSize(30) // Lepszy rozmiar czcionki
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White) // Lepszy kontrast
-      }
-      .type(ButtonType.Capsule)
+      // }
+      // .type(ButtonType.Capsule)
       //.margin({ top: 10 })
       .backgroundColor(Color.Red)
       // Wymiary z oryginalnego kodu
-      .width('60%')
-      .height(40)
+      .width('150%')
+      .height('50%')
+          .radialGradient({
+            // Define colors and their stopping points (offsets)
+            colors: [
+              [Color.Black, 0.0], // Bright Green in the center
+              // 0x27D09D
+              //37C3AD
+              //17F98D
+              [0x555555, 0.7],                   // Standard Green 70% of the way out
+              [0x36B079, 1.0]      // Dark Green at the edge
+            ],
+            // Since we are applying this to a semi-circle, let's keep the center
+            // slightly offset to the top edge for a better look on the upper half.
+            center: ['50%', '100%'],
+            radius: '100%', // Make the radius match the button's largest dimension
+          })
       .onClick(() => {
         console.info(`Succeeded in clicking the 'Config' button.`)
         this.getUIContext().getRouter().pushUrl({url: 'pages/Index'}).then(() => {
